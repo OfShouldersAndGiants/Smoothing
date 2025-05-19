@@ -73,6 +73,17 @@ These limitations have led to the development of alternative smoothing technique
 
 Choose the smoothing technique based on your specific use case and requirements.
 
+## Dataset Setup
+
+To run experiments or train models with this project, you need to download the dataset manually from Kaggle:
+
+- [Email Spam Classification Dataset on Kaggle](https://www.kaggle.com/datasets/purusinghvi/email-spam-classification-dataset)
+
+**Instructions:**
+1. Download the dataset from the Kaggle link above (you may need a Kaggle account).
+2. Place the downloaded file (e.g., `combined_email_data_sample.csv`) into the `src/assets` directory of this project.
+
+> **Note:** The project expects the dataset to be present in `src/assets` and will not attempt to download it automatically.
 
 ## Project Setup
 
