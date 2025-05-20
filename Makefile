@@ -13,6 +13,9 @@ clean:
 	rm -rf libtorch libtorch.zip
 	cargo clean
 
-run:
-	cargo run -- ./src/assets/test_email.txt
+run-ham:
+	cargo run -- ./src/assets/test_email_ham.txt
+
+run-spam:
+	cargo run -- ./src/assets/test_email_spam.txt
 

@@ -17,7 +17,7 @@ fn main() {
     // This file is a csv with the following columns:
     // 0: (1 or 0) - ham or spam
     // 1: email text
-    let file_path = "./src/assets/combined_email_data.csv";
+    let file_path = "./src/assets/small_data_sample.csv";
 
     // The data parser will parse the data and return a struct with the ham and spam emails
     let data_parser = DataParser::new(file_path.to_string(), "cache.bin");
