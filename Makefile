@@ -1,4 +1,15 @@
-.PHONY: setup clean
+help:
+	@echo "Available targets:" && \
+	 echo "  setup     - Download and set up libtorch" && \
+	 echo "  clean     - Remove build artifacts and libtorch" && \
+	 echo "  run-ham   - Run the ham email test" && \
+	 echo "  run-spam  - Run the spam email test" && \
+	 echo "  help      - Show this help message"
+
+.PHONY: help setup clean
+
+# Set 'help' as the default target
+.DEFAULT_GOAL := help
 
 setup:
 	mkdir -p libtorch; \
