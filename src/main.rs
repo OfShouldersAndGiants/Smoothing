@@ -38,7 +38,7 @@ fn main() {
 }
 
 fn laplace_smoothing_result(data_parser: &DataParser, test_email_tokens: &Vec<u32>) -> String {
-    let laplace = Laplace::new(data_parser, 1.0, test_email_tokens);
+    let laplace = Laplace::new(data_parser, test_email_tokens);
     let prob_ham = laplace.log_prob_ham();
     let prob_spam = laplace.log_prob_spam();
 

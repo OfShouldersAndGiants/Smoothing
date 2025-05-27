@@ -4,18 +4,16 @@ use crate::utils::data_parser::DataParser;
 pub struct Laplace {
     ham_tokens: HashMap<u32, usize>,
     spam_tokens: HashMap<u32, usize>,
-    alpha: f64,
     vocab_size: usize,
     test_email_tokens: Vec<u32>,
 }
 
 
 impl Laplace {
-    pub fn new(data_parser: &DataParser, alpha: f64, test_email_tokens: &Vec<u32>) -> Self {
+    pub fn new(data_parser: &DataParser, test_email_tokens: &Vec<u32>) -> Self {
         Self {
             ham_tokens: data_parser.ham_tokens.clone(),
             spam_tokens: data_parser.spam_tokens.clone(),
-            alpha,
             vocab_size: data_parser.unique_words,
             test_email_tokens: test_email_tokens.clone(),
         }
@@ -29,7 +27,7 @@ impl Laplace {
         let mut log_prob = 0.0;
         for token in &self.test_email_tokens {
             let count = *self.ham_tokens.get(token).unwrap_or(&0);
-            let prob = self.laplace_smoothing(count as u32, total_ham_tokens, self.vocab_size, self.alpha);
+            let prob = self.laplace_smoothing(count as u32, total_ham_tokens, self.vocab_size);
             log_prob += prob.ln();
         }
         log_prob
@@ -41,7 +39,7 @@ impl Laplace {
         let mut log_prob = 0.0;
         for token in &self.test_email_tokens {
             let count = *self.spam_tokens.get(token).unwrap_or(&0);
-            let prob = self.laplace_smoothing(count as u32, total_spam_tokens, self.vocab_size, self.alpha);
+            let prob = self.laplace_smoothing(count as u32, total_spam_tokens, self.vocab_size);
             log_prob += prob.ln();
         }
         log_prob
@@ -51,7 +49,7 @@ impl Laplace {
     // Like in the example, we have 2 apples and 1 banana, and 3 unique words in the vocabulary
     // We want to apply Laplace smoothing to get the probability of the word "apple" being in the class
     // Formula: P(word|class) = (count(word, class) + 1) / (count(class) + V)
-    fn laplace_smoothing(&self, occurrences_of_word: u32, total_words_in_class: usize, vocab_size: usize, alpha: f64) -> f64 {
-        (occurrences_of_word as f64 + alpha) / (total_words_in_class as f64 + alpha * vocab_size as f64)
+    fn laplace_smoothing(&self, occurrences_of_word: u32, total_words_in_class: usize, vocab_size: usize) -> f64 {
+        (occurrences_of_word as f64 + 1.0) / (total_words_in_class as f64 + vocab_size as f64)
     }
 }
