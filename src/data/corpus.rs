@@ -14,6 +14,8 @@ pub struct Corpus {
     // Test bigrams: A set of bigrams to test smoothing methods on
     // Includes seen, unseen but plausible, and completely unseen bigrams
     test_bigrams: Vec<(String, String)>,
+    /// The total number of unigram tokens in the corpus (sum of all unigram counts)
+    total_unigram_tokens: usize,
 }
 
 impl Corpus {
@@ -61,11 +63,13 @@ impl Corpus {
             ("mat".to_string(), "the".to_string()),   // unseen
             ("mouse".to_string(), "ran".to_string()), // completely unseen
         ];
+        let total_unigram_tokens = unigram_counts.values().sum();
         Corpus {
             unigram_counts,
             bigram_counts,
             vocab,
             test_bigrams,
+            total_unigram_tokens,
         }
     }
 
@@ -87,5 +91,17 @@ impl Corpus {
     /// Returns a reference to the test bigrams
     pub fn test_bigrams(&self) -> &Vec<(String, String)> {
         &self.test_bigrams
+    }
+
+    pub fn get_num_unique_continuations(&self, context: &str) -> usize {
+        self.bigram_counts
+            .keys()
+            .filter(|(h, _)| h == context)
+            .count()
+    }
+
+    /// Returns the total number of unigram tokens in the corpus
+    pub fn get_total_unigram_tokens(&self) -> usize {
+        self.total_unigram_tokens
     }
 }
