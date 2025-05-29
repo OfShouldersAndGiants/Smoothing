@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 mod smoothing;
-mod utils;
 
 fn main() {
     // 1. The first thing we do is define our corpus, we are going to use a vector of strings
