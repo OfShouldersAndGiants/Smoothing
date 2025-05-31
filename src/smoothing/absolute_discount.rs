@@ -17,9 +17,13 @@ pub fn absolute_discount_smooth(
     context_count: usize,            // count of the context ("the") it is the "c(h)" in the formula
     num_unique_continuations: usize, // number of unique words following "the" it is the "T(h)" in the formula
     unigram_count_w: usize,          // count of the word ("cat") it is the "c(w)" in the formula
-    total_unigram_tokens: usize,     // total number of tokens in the corpus
+    total_unigram_tokens: usize,     // total number of tokens in the corpusf
     discount: f64,                   // discount value (D)
 ) -> f64 {
+    // Context never appears, or no unique continuations. We use unigram probability, (backoff) in order to avoid division by zero.
+    if context_count == 0 || num_unique_continuations == 0 {
+        return unigram_count_w as f64 / total_unigram_tokens as f64;
+    }
     let discounted = ((bigram_count as f64 - discount).max(0.0)) / context_count as f64;
     let lambda = (discount * num_unique_continuations as f64) / context_count as f64;
     let backoff_prob = unigram_count_w as f64 / total_unigram_tokens as f64;

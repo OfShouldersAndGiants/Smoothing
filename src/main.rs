@@ -13,7 +13,7 @@ fn main() {
 
     // 3. For each test bigram, apply smoothing methods
     //    We print the results for Laplace and Lidstone smoothing
-    println!("Bigram\t\tLaplace\tLidstone");
+    println!("Bigram\t\t     Laplace  Lidstone AbsDiscount");
 
     for bigram in corpus.test_bigrams() {
         // Set up our variables for the smoothing methods
