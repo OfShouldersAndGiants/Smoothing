@@ -1,9 +1,6 @@
 use std::collections::HashMap;
 
 pub struct Corpus {
-    // Unigram counts: To know how often each word appears in the corpus
-    // This helps us calculate the denominator for bigram probabilities
-    unigram_counts: HashMap<String, usize>,
     // Bigram counts: To know how often each word pair appears in the corpus
     // This helps us estimate P(word2 | word1) = count(word1,word2) / count(word1)
     bigram_counts: HashMap<(String, String), usize>,
@@ -65,7 +62,6 @@ impl Corpus {
         ];
         let total_unigram_tokens = unigram_counts.values().sum();
         Corpus {
-            unigram_counts,
             bigram_counts,
             vocab,
             test_bigrams,
@@ -75,7 +71,11 @@ impl Corpus {
 
     /// Returns the count of a unigram (word) in the corpus
     pub fn get_unigram_count(&self, word: &str) -> usize {
-        self.unigram_counts.get(word).cloned().unwrap_or(0)
+        self.bigram_counts
+            .iter()
+            .filter(|((w1, _), _)| w1 == word)
+            .map(|(_, &count)| count)
+            .sum()
     }
 
     /// Returns the count of a bigram (word pair) in the corpus

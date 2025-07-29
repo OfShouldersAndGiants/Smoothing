@@ -2,8 +2,7 @@ help:
 	@echo "Available targets:" && \
 	 echo "  setup     - Download and set up libtorch" && \
 	 echo "  clean     - Remove build artifacts and libtorch" && \
-	 echo "  run-ham   - Run the ham email test" && \
-	 echo "  run-spam  - Run the spam email test" && \
+	 echo "  run       - Run the program" && \
 	 echo "  help      - Show this help message"
 
 .PHONY: help setup clean
@@ -24,9 +23,6 @@ clean:
 	rm -rf libtorch libtorch.zip
 	cargo clean
 
-run-ham:
-	cargo run -- ./src/assets/test_email_ham.txt
-
-run-spam:
-	cargo run -- ./src/assets/test_email_spam.txt
+run:
+	cargo run
 
