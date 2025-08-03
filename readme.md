@@ -5,8 +5,8 @@ This is a Rust project that uses PyTorch (through `tch-rs`) for AI and machine l
 For detailed explanations of smoothing techniques, see:
 - [LAPLACE_SMOOTHING.md](readmes/LAPLACE_SMOOTHING.md)
 - [LIDSTONE_SMOOTHING.md](readmes/LIDSTONE_SMOOTHING.md)
-- [GOOD_TURING_SMOOTHING.md](readmes/GOOD_TURING_SMOOTHING.md)
 - [ABSOLUTE_DISCOUNT_SMOOTHING.md](readmes/ABSOLUTE_DISCOUNT_SMOOTHING.md)
+- [GOOD_TURING_SMOOTHING.md](readmes/GOOD_TURING_SMOOTHING.md)
 
 ## Dataset Setup
 

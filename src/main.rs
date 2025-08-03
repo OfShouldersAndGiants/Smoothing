@@ -1,5 +1,6 @@
 use data::corpus::Corpus;
-use smoothing::{absolute_discount, laplace, lidstone};
+use smoothing::{absolute_discount, laplace, lidstone, good_turing};
+
 mod data;
 mod smoothing;
 
@@ -11,15 +12,19 @@ fn main() {
     // 2. Get the vocabulary size for use in smoothing methods
     let vocab_size = corpus.vocab_size();
 
+    // 2.1 Get the frequencies for each bigram count
+    let frequencies = corpus.repetitions.clone();
+
     // 3. For each test bigram, apply smoothing methods
     //    We print the results for Laplace and Lidstone smoothing
-    println!("Bigram\t\t     Laplace  Lidstone AbsDiscount");
+    println!("Bigram\t\t     Laplace  Lidstone AbsDiscount GoodTuring");
 
     for bigram in corpus.test_bigrams() {
         // Set up our variables for the smoothing methods
         let context = &bigram.0; // The first word in the bigram
         let word = &bigram.1; // The second word in the bigram
         let context_count = corpus.get_unigram_count(context); // How many times the context appears
+        let bigrams_count = corpus.get_total_existing_bigrams(); // How many existing bigrams exist in the corpus
         let bigram_count = corpus.get_bigram_count(bigram); // How many times the bigram appears
         let num_unique_continuations = corpus.get_num_unique_continuations(context); // How many unique words follow the context
         let unigram_count_w = corpus.get_unigram_count(word); // How many times the word appears
@@ -39,14 +44,17 @@ fn main() {
             total_unigram_tokens,
             discount,
         );
+        // Good turing smoothing...
+        let good_turing = good_turing::good_turing(bigrams_count as f64, bigram_count as f64, &frequencies);
 
         // A simple visualization of the results ;)
         println!(
-            "{:<20} {:<8.4} {:<8.4} {:<8.4}",
+            "{:<20} {:<8.4} {:<8.4} {:<8.4} {:<8.4}",
             format!("({:?}, {:?})", context, word),
             laplace,
             lidstone,
-            absolute_discount
+            absolute_discount,
+            good_turing,
         );
     }
 }

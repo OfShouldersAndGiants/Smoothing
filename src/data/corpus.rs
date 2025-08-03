@@ -13,6 +13,8 @@ pub struct Corpus {
     test_bigrams: Vec<(String, String)>,
     /// The total number of unigram tokens in the corpus (sum of all unigram counts)
     total_unigram_tokens: usize,
+    /// A dictionary that contains the amount of repetitions for a certain amount of repetitions
+    pub repetitions: HashMap<usize, usize>
 }
 
 impl Corpus {
@@ -44,6 +46,27 @@ impl Corpus {
                 }
             }
         }
+
+        let total_unigram_tokens = unigram_counts.values().sum();
+
+        // Repetitions, where HashMap<R1, Amount of reps for R1)
+        // We want to save how many times a bigram of 1 repetition exists, how many times
+        // a bigram of 2 repetitions exist, and so on
+        let mut repetitions_vec: Vec<usize> = Vec::new();
+        bigram_counts.iter().for_each(|bigram| {
+            repetitions_vec.push(*bigram.1);
+        });
+        let mut repetitions: HashMap<usize, usize> = HashMap::new();
+        repetitions_vec.iter().for_each(|rep| {
+            let amount: usize = repetitions.get(rep).unwrap_or(&0).clone();
+            if amount != 0 {
+                repetitions.insert(*rep, amount + 1);
+            } else {
+                repetitions.insert(*rep, 1);
+            }
+        });
+
+
         // Define test bigrams with real words
         // We create a set of test bigrams that includes:
         // - Seen bigrams: Pairs that appear in our training corpus
@@ -60,12 +83,12 @@ impl Corpus {
             ("mat".to_string(), "the".to_string()),   // unseen
             ("mouse".to_string(), "ran".to_string()), // completely unseen
         ];
-        let total_unigram_tokens = unigram_counts.values().sum();
         Corpus {
             bigram_counts,
             vocab,
             test_bigrams,
             total_unigram_tokens,
+            repetitions
         }
     }
 
@@ -103,5 +126,10 @@ impl Corpus {
     /// Returns the total number of unigram tokens in the corpus
     pub fn get_total_unigram_tokens(&self) -> usize {
         self.total_unigram_tokens
+    }
+
+    /// Returns the total number of bigrams that exist in the corpus
+    pub fn get_total_existing_bigrams(&self) -> usize {
+        self.bigram_counts.values().sum()
     }
 }
