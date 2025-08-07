@@ -30,6 +30,7 @@ fn main() {
         let unigram_count_w = corpus.get_unigram_count(word); // How many times the word appears
         let total_unigram_tokens = corpus.get_total_unigram_tokens(); // How many total tokens in the corpus
         let discount = 0.75; // The discount parameter for absolute discount smoothing
+        let legal_unseen_bigrams = corpus.get_legal_unseen_bigrams();
 
         // Laplace smoothing is a simple method that adds 1 to all counts and divides by (context_count + vocab_size)
         let laplace = laplace::laplace_smooth(bigram_count, context_count, vocab_size);
@@ -45,7 +46,7 @@ fn main() {
             discount,
         );
         // Good turing smoothing...
-        let good_turing = good_turing::good_turing(bigrams_count as f64, bigram_count as f64, &frequencies);
+        let good_turing = good_turing::good_turing(bigrams_count as f64, bigram_count, &frequencies, legal_unseen_bigrams as f64);
 
         // A simple visualization of the results ;)
         println!(

@@ -132,4 +132,12 @@ impl Corpus {
     pub fn get_total_existing_bigrams(&self) -> usize {
         self.bigram_counts.values().sum()
     }
+
+    // Returns the number of legal unseen bigrams, that's to say, bigrams that are not in the corpus
+    // but are in the vocabulary
+    pub fn get_legal_unseen_bigrams(&self) -> usize {
+        let observed_types = self.bigram_counts.len();
+        let total_possible = self.vocab_size() * self.vocab_size();
+        total_possible - observed_types
+    }
 }
