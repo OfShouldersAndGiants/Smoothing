@@ -4,6 +4,9 @@ pub struct Corpus {
     // Bigram counts: To know how often each word pair appears in the corpus
     // This helps us estimate P(word2 | word1) = count(word1,word2) / count(word1)
     bigram_counts: HashMap<(String, String), usize>,
+    // Unigram counts: To know how often each word appears in the corpus
+    // This is needed for accurate unigram frequency calculations
+    unigram_counts: HashMap<String, usize>,
     // Vocabulary: The set of unique words in the corpus
     // This is crucial for smoothing methods like Laplace and Lidstone
     // which need to know the vocabulary size to handle unseen words
@@ -85,6 +88,7 @@ impl Corpus {
         ];
         Corpus {
             bigram_counts,
+            unigram_counts,
             vocab,
             test_bigrams,
             total_unigram_tokens,
@@ -92,13 +96,12 @@ impl Corpus {
         }
     }
 
-    /// Returns the count of a unigram (word) in the corpus
-    pub fn get_unigram_count(&self, word: &str) -> usize {
-        self.bigram_counts
-            .iter()
-            .filter(|((w1, _), _)| w1 == word)
-            .map(|(_, &count)| count)
-            .sum()
+
+
+    pub fn get_unigram_start_count(&self, word: &str) -> usize {
+        // This should return the total unigram count of the word, not bigram counts
+        // where the word appears as the first element
+        *self.unigram_counts.get(word).unwrap_or(&0)
     }
 
     /// Returns the count of a bigram (word pair) in the corpus
@@ -123,6 +126,15 @@ impl Corpus {
             .count()
     }
 
+    /// Returns the context count c(h) - how many times the context word appears as the first word in bigrams
+    pub fn get_context_count(&self, context: &str) -> usize {
+        self.bigram_counts
+            .iter()
+            .filter(|((h, _), _)| h == context)
+            .map(|(_, &count)| count)
+            .sum()
+    }
+
     /// Returns the total number of unigram tokens in the corpus
     pub fn get_total_unigram_tokens(&self) -> usize {
         self.total_unigram_tokens
@@ -140,4 +152,6 @@ impl Corpus {
         let total_possible = self.vocab_size() * self.vocab_size();
         total_possible - observed_types
     }
+
+
 }

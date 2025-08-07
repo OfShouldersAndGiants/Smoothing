@@ -20,6 +20,13 @@ pub fn absolute_discount_smooth(
     total_unigram_tokens: usize,     // total number of tokens in the corpusf
     discount: f64,                   // discount value (D)
 ) -> f64 {
+    // println!("bigram_count: {}", bigram_count);
+    // println!("context_count: {}", context_count);
+    // println!("num_unique_continuations: {}", num_unique_continuations);
+    // println!("unigram_count_w: {}", unigram_count_w);
+    // println!("total_unigram_tokens: {}", total_unigram_tokens);
+    // println!("discount: {}", discount);
+
     // Context never appears, or no unique continuations. We use unigram probability, (backoff) in order to avoid division by zero.
     if context_count == 0 || num_unique_continuations == 0 {
         return unigram_count_w as f64 / total_unigram_tokens as f64;

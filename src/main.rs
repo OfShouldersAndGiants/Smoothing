@@ -23,12 +23,15 @@ fn main() {
         // Set up our variables for the smoothing methods
         let context = &bigram.0; // The first word in the bigram
         let word = &bigram.1; // The second word in the bigram
-        let context_count = corpus.get_unigram_count(context); // How many times the context appears
+        let context_count = corpus.get_context_count(context); // How many times the context appears as first word in bigrams
         let bigrams_count = corpus.get_total_existing_bigrams(); // How many existing bigrams exist in the corpus
         let bigram_count = corpus.get_bigram_count(bigram); // How many times the bigram appears
         let num_unique_continuations = corpus.get_num_unique_continuations(context); // How many unique words follow the context
-        let unigram_count_w = corpus.get_unigram_count(word); // How many times the word appears
+
+
+        let unigram_count_w = corpus.get_unigram_start_count(word); // How many times the word appears
         let total_unigram_tokens = corpus.get_total_unigram_tokens(); // How many total tokens in the corpus
+
         let discount = 0.75; // The discount parameter for absolute discount smoothing
         let legal_unseen_bigrams = corpus.get_legal_unseen_bigrams();
 
@@ -37,6 +40,9 @@ fn main() {
         // Lidstone smoothing is a more flexible method that uses a parameter λ (here we use 0.5)
         let lidstone = lidstone::lidstone_smooth(bigram_count, context_count, vocab_size, 0.5);
         // Absolute discount smoothing is a more flexible method that uses a parameter D (here we use 0.75)
+
+
+
         let absolute_discount = absolute_discount::absolute_discount_smooth(
             bigram_count,
             context_count,
