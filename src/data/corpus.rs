@@ -104,6 +104,10 @@ impl Corpus {
         *self.unigram_counts.get(word).unwrap_or(&0)
     }
 
+    pub fn get_total_distinct_bigram_types(&self) -> usize {
+        self.bigram_counts.len()
+    }
+
     /// Returns the count of a bigram (word pair) in the corpus
     pub fn get_bigram_count(&self, bigram: &(String, String)) -> usize {
         self.bigram_counts.get(bigram).cloned().unwrap_or(0)
@@ -123,6 +127,13 @@ impl Corpus {
         self.bigram_counts
             .keys()
             .filter(|(h, _)| h == context)
+            .count()
+    }
+
+    pub fn get_unique_predecessors_of_w2(&self, word: &str) -> usize {
+        self.bigram_counts
+            .keys()
+            .filter(|(_, t)| t == word)
             .count()
     }
 
