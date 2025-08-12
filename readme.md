@@ -7,6 +7,7 @@ For detailed explanations of smoothing techniques, see:
 - [LIDSTONE_SMOOTHING.md](readmes/LIDSTONE_SMOOTHING.md)
 - [ABSOLUTE_DISCOUNT_SMOOTHING.md](readmes/ABSOLUTE_DISCOUNT_SMOOTHING.md)
 - [GOOD_TURING_SMOOTHING.md](readmes/GOOD_TURING_SMOOTHING.md)
+- [KNESER_NEY_SMOOTHING.md](readmes/KNESER_NEY_SMOOTHING.md)
 
 ## Dataset Setup
 
